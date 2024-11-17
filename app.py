@@ -5,6 +5,8 @@ from dash import Dash, dcc, html, Input, Output
 import threading
 from flask import Response, request
 import time
+import signal
+import os
 
 # Initialize the Dash app
 app = Dash(__name__)
@@ -92,7 +94,7 @@ app.layout = html.Div([
         options=[{"label": color, "value": color} for color in color_ranges.keys()],
         value="Red",
         clearable=False,
-        style={"width": "50%", "margin": "auto"}
+        style={"width": "50%", "margin": "auto", "padding-bottom": "15px"}
     ),
     html.Div([
         html.Img(id="video-feed", style={"maxWidth": "100%", "height": "auto"})
@@ -118,6 +120,7 @@ def stop_server():
     running = False
     cap.release()
     print("Application stopped.")
+    os._exit(0)  # Force exit after stopping
 
 # Run the Dash app in a separate thread
 def run_dash_app():
